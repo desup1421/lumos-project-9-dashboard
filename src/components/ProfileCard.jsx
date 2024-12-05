@@ -1,10 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const ProfileCard = () => {
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
-  const formatDate = (date) => {
+  const formadivate = (date) => {
     const newDate = new Date(date);
     const formatter = new Intl.DateTimeFormat("id-ID", {
       day: "2-digit",
@@ -20,7 +22,11 @@ const ProfileCard = () => {
   return (
     <div className="mt-20 md:mt-10 lg:mt-0 border border-gray-300 rounded-lg p-4 shadow-md grid grid-cols-1 md:grid-cols-4 gap-4">
       <div className="col-span-1">
-        <img src={user.photo} alt="profile" className="w-full md:h-full object-cover" />
+        <img
+          src={user.photo}
+          alt="profile"
+          className="w-full md:h-full object-cover"
+        />
       </div>
       <div className="col-span-3 grid gap-1">
         <header>
@@ -30,42 +36,47 @@ const ProfileCard = () => {
           </h1>
           <p className="text-sm text-gray-500">{`@${user.username}`}</p>
         </header>
-        <table>
-          <tr>
-            <th className="text-left">Email</th>
-            <td>{user.email}</td>
-          </tr>
-          <tr>
-            <th className="text-left">LinedIn</th>
-            <td>
+        <div>
+          <div className="grid grid-cols-4">
+            <div className="text-left">Email</div>
+            <div className="col-span-3">{user.email}</div>
+          </div>
+          <div className="grid grid-cols-4">
+            <div className="text-left">LinedIn</div>
+            <div className="col-span-3">
               <a
                 className="text-blue-500 underline cursor-pointer"
-                href={user.linkedin}
+                href={user.linkedin_url}
               >
-                Visit linkedIn
+                {user.linkedin_url}
               </a>
-            </td>
-          </tr>
-          <tr>
-            <th className="text-left">Instagram</th>
-            <td>
+            </div>
+          </div>
+          <div className="grid grid-cols-4">
+            <div className="text-left">Instagram</div>
+            <div className="col-span-3">
               <a
                 className="text-blue-500 underline cursor-pointer"
-                href={user.linkedin}
+                href={user.ig_url}
               >
-                Visit instagram
+                {user.ig_url}
               </a>
-            </td>
-          </tr>
-          <tr>
-            <th className="text-left">Create at</th>
-            <td>{formatDate(user.created_at)}</td>
-          </tr>
-          <tr>
-            <th className="text-left">Last modified</th>
-            <td>{formatDate(user.updated_at)}</td>
-          </tr>
-        </table>
+            </div>
+          </div>
+          <div className="grid grid-cols-4">
+            <div className="text-left">Create at</div>
+            <div className="col-span-3">{formadivate(user.created_at)}</div>
+          </div>
+          <div className="grid grid-cols-4">
+            <div className="text-left">Last modified</div>
+            <div className="col-span-3">{formadivate(user.updated_at)}</div>
+          </div>
+          <button 
+            onClick={() => navigate(`/user/edit/${user.email}`)}
+            className="bg-primary-500 px-5 py-2 self-start rounded-md mt-5">
+            Edit Profile
+          </button>
+        </div>
       </div>
     </div>
   );

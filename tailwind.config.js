@@ -2,6 +2,7 @@
 
 import rippleui from "rippleui";
 export default {
+  darkMode:false,
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -21,5 +22,8 @@ export default {
       }
     },
   },
+  rippleui: {
+		removeThemes: ["dark", "light", "whateverTheme"],
+	},
   plugins: [rippleui],
 }

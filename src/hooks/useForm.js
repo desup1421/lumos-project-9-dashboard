@@ -4,10 +4,10 @@ const useForm = (initialValues) => {
     const [values, setValues] = useState(initialValues);
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value, type, checked, files } = e.target;
         setValues((prepValues) => ({
             ...prepValues,
-            [name]: type === 'checkbox' ? checked : value,
+            [name]: type === 'checkbox' ? checked : type === "file" ? files[0] : value,
         }));
     };
 

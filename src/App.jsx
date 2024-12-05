@@ -76,6 +76,14 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/user/edit/:email"
+                element={
+                  <ProtectedRoute>
+                    <CreateUser />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
             <Route>
               <Route
