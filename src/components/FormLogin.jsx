@@ -24,9 +24,6 @@ const FormLogin = () => {
     }
   };
 
-  if(error) {
-    console.error(error);  
-  }
 
   return (
     <div className="border w-full max-w-96 rounded-lg px-5 py-10 shadow-md grid gap-5">
@@ -68,6 +65,7 @@ const FormLogin = () => {
           />
           <label htmlFor="remember_me">Remember me</label>
         </div>
+        {error && <p className="text-red-500 bg-red-500/10 py-2 px-5">{error?.message}</p>}
         <button disabled={isLoading} className="bg-primary-500 hover:scale-95 text-black disabled:bg-primary-500/50 rounded-md mt-2 p-2">
           {
             isLoading ? "Loading..." : "Login"
