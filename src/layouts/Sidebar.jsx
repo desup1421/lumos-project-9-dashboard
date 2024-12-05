@@ -147,7 +147,7 @@ const Sidebar = () => {
                 <div className="dropdown-menu dropdown-menu-right-top grid gap-2 ml-2">
                   {/* <a className="dropdown-item text-sm">Profile</a> */}
                   <Link
-                    to="/"
+                    to="/profile"
                     tabIndex="-1"
                     className="dropdown-item text-sm text-black hover:bg-black/10"
                   >
