@@ -1,8 +1,11 @@
-import React from 'react'
+import React from 'react';
+import ProfileCard from '../components/ProfileCard';
 
 const Profile = () => {
   return (
-    <div>Profile</div>
+    <div>
+      <ProfileCard />
+    </div>
   )
 }
 

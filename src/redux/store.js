@@ -7,7 +7,9 @@ import { combineReducers } from 'redux';
 import { encryptTransform } from 'redux-persist-transform-encrypt';
 // Slice reducer
 import authSlice from './slices/authSlice';
-import { userSliceAPI } from './slices/userSlice';
+import useSlice from './slices/userSlice';
+// import useSlice from './slices/userUpdate';
+// import { userSliceAPI } from './slices/userSlice';
 
 const encryptor = encryptTransform({
     secretKey: 'practice',
@@ -24,7 +26,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     auth: authSlice,
-    [userSliceAPI.reducerPath]: userSliceAPI.reducer
+    users: useSlice,
+    // [userSliceAPI.reducerPath]: userSliceAPI.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -34,7 +37,8 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: false,
-        }).concat(userSliceAPI.middleware),
+        })
+        // .concat(userSliceAPI.middleware),
 
 }
 );

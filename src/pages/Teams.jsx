@@ -1,9 +1,22 @@
-import React from "react";
-import { useGetAllUserQuery } from "../redux/slices/userSlice";
+import React, {useEffect} from "react";
+// import { useGetAllUserQuery } from "../redux/slices/userSlice";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteUser, getUsers } from "../redux/slices/userSlice";
 
 const Teams = () => {
-  const { data, isLoading, error } = useGetAllUserQuery(1);
-  console.log(data);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // const { data, isLoading, error } = useGetAllUserQuery(1);
+  const { users: data, isLoading, isEror: error, isSuccess } = useSelector((state) => state.users);
+
+  useEffect(() => {
+    dispatch(getUsers(1));
+  }, [dispatch, isSuccess]);
+
+  const handleDelete = (id) => {
+    dispatch(deleteUser(id));
+  };
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -28,7 +41,10 @@ const Teams = () => {
                 colSpan="5"
               >
                 {/* Button Add */}
-                <button className="p-2 bg-primary-500 text-black rounded-sm float-right">
+                <button
+                  onClick={() => navigate("/user/create")}
+                  className="p-2 bg-primary-500 text-black rounded-sm float-right"
+                >
                   <i className="bx bx-add-to-queue mr-1"></i>
                   Add new member
                 </button>
@@ -88,8 +104,10 @@ const Teams = () => {
                 <td className="px-6 py-4 flex gap-1 justify-center items-center text-end text-sm font-medium">
                   {/* Button Delete */}
                   <button
+                    onClick={() => handleDelete(item.id)}
                     type="button"
-                    className="p-2 rounded-lg border border-red-500"
+                    className="p-2 rounded-lg border border-red-500 disabled:cursor-not-allowed"
+                    disabled = {isLoading}
                   >
                     <i className="bx bx-trash text-red-500"></i>
                   </button>

@@ -43,7 +43,7 @@ const Sidebar = () => {
                 <section className="menu-section px-4 pt-10">
                   <ul className="menu-items">
                     {/* DASHBOARD */}
-                    <li className="menu-item group">
+                    <li className="menu-item group hover:bg-white/50">
                       <i className="bx bx-file text-white text-xl group-hover:text-black"></i>
                       <Link
                         to="/"
@@ -53,7 +53,7 @@ const Sidebar = () => {
                       </Link>
                     </li>
                     {/* TEAMS */}
-                    <li className="menu-item group">
+                    <li className="menu-item group hover:bg-white/50">
                       <i className="bx bx-file text-white text-xl group-hover:text-black"></i>
                       <Link
                         to="/user"
@@ -71,7 +71,7 @@ const Sidebar = () => {
                         defaultChecked
                       />
                       <label
-                        className="menu-item justify-between group"
+                        className="menu-item justify-between group hover:bg-white/50"
                         htmlFor="menu-1"
                       >
                         {/* LOGO AND TEXT */}
@@ -103,13 +103,13 @@ const Sidebar = () => {
                         <div className="min-h-0">
                           <Link
                             to="/portfolio"
-                            className="menu-item ml-6 text-white/50 hover:text-black"
+                            className="menu-item ml-6 text-white/50 hover:text-black hover:bg-white/50"
                           >
                             Portfolio
                           </Link>
                           <Link
                             to="/blog"
-                            className="menu-item ml-6 text-white/50 hover:text-black"
+                            className="menu-item ml-6 text-white/50 hover:text-black hover:bg-white/50"
                           >
                             Blog
                           </Link>
@@ -147,7 +147,7 @@ const Sidebar = () => {
                 <div className="dropdown-menu dropdown-menu-right-top grid gap-2 ml-2">
                   {/* <a className="dropdown-item text-sm">Profile</a> */}
                   <Link
-                    to="/"
+                    to="/profile"
                     tabIndex="-1"
                     className="dropdown-item text-sm text-black hover:bg-black/10"
                   >
