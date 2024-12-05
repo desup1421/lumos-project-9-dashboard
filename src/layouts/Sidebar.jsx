@@ -1,27 +1,37 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../redux/slices/authSlice";
 // IMAGES
 import logo from "../assets/images/logo.svg";
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
   const [isShow, setIsShow] = useState(false);
   const handleShowModal = () => {
     setIsShow(!isShow);
   };
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/login");
+  }
+
   return (
     <div className="w-screen relative">
       <button
         onClick={handleShowModal}
-        className="fixed bg-primary-500 top-10 right-10 p-1 md:hidden"
+        className="fixed bg-primary-500 top-10 right-10 p-1 md:hidden z-50"
       >
         <i className="bx bx-menu text-5xl"></i>
       </button>
       <div className="flex md:flex flex-row gap-10">
         <div className="w-full max-w-[18rem]">
           <aside
-            className={`sidebar h-full w-0 overflow-hidden md:w-full ${
-              isShow && "w-full"
+            className={`sidebar h-full w-0 overflow-hidden md:overflow-visible md:w-full ${
+              isShow && "w-full overflow-visible"
             } sidebar-fixed-left justify-start bg-black text-white transition-all duration-500`}
           >
             <section className="sidebar-title items-center p-4">
@@ -45,7 +55,10 @@ const Sidebar = () => {
                     {/* TEAMS */}
                     <li className="menu-item group">
                       <i className="bx bx-file text-white text-xl group-hover:text-black"></i>
-                      <Link to="/user" className="text-white group-hover:text-black">
+                      <Link
+                        to="/user"
+                        className="text-white group-hover:text-black"
+                      >
                         Teams
                       </Link>
                     </li>
@@ -117,32 +130,37 @@ const Sidebar = () => {
                 >
                   <div className="flex flex-row gap-4 p-4">
                     <div className="avatar avatar-md">
-                      <img
-                        src="https://i.pravatar.cc/150?img=30"
-                        alt="avatar"
-                      />
+                      <img src={user?.photo} alt="avatar" />
                     </div>
 
                     <div className="flex flex-col">
                       <span className="text-white text-nowrap group-hover:text-black">
-                        Sandra Marx
+                        {user?.name}
                       </span>
                       <span className="text-xs font-normal text-white/50">
-                        sandra
+                        {user?.title}
                       </span>
                     </div>
                   </div>
                 </label>
 
-                <div className="dropdown-menu dropdown-menu-right-top ml-2">
-                  <a className="dropdown-item text-sm">Profile</a>
-                  <a tabIndex="-1" className="dropdown-item text-sm text-black">
-                    Account settings
-                  </a>
-                  <a tabIndex="-1" className="dropdown-item text-sm text-black">
-                    Change email
-                  </a>
-                  <a tabIndex="-1" className="dropdown-item text-sm text-black">
+                <div className="dropdown-menu dropdown-menu-right-top grid gap-2 ml-2">
+                  {/* <a className="dropdown-item text-sm">Profile</a> */}
+                  <Link
+                    to="/"
+                    tabIndex="-1"
+                    className="dropdown-item text-sm text-black hover:bg-black/10"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    tabIndex="-1"
+                    className="dropdown-item text-sm text-white hover:scale-95 hover:bg-red-500 bg-red-600"
+                  >
+                    Logout
+                  </button>
+                  {/* <a tabIndex="-1" className="dropdown-item text-sm text-black">
                     Subscriptions
                   </a>
                   <a tabIndex="-1" className="dropdown-item text-sm text-black">
@@ -153,7 +171,7 @@ const Sidebar = () => {
                   </a>
                   <a tabIndex="-1" className="dropdown-item text-sm text-black">
                     Settings
-                  </a>
+                  </a> */}
                 </div>
               </div>
             </section>
@@ -161,32 +179,6 @@ const Sidebar = () => {
         </div>
       </div>
     </div>
-    // <aside className="h-lvh w-0 overflow-hidden md:w-72 bg-black text-white transition-all duration-500 fixed">
-    //   <div className="p-10">
-    //     <header className="pb-10">
-    //       <img className="h-8 w-28" src={logo} alt="logo" />
-    //     </header>
-    //     <div className="mt-20">
-    //       <ul className="text-xl flex flex-col gap-5">
-    //         <li>
-    //           <Link to="/">Dashboard</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/profile">Profile</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/blog">Blog</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/portfolio">Portfolio</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/user">Teams</Link>
-    //         </li>
-    //       </ul>
-    //     </div>
-    //   </div>
-    // </aside>
   );
 };
 

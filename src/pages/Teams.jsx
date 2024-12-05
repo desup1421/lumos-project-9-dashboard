@@ -1,6 +1,16 @@
 import React from "react";
+import { useGetAllUserQuery } from "../redux/slices/userSlice";
 
 const Teams = () => {
+  const { data, isLoading, error } = useGetAllUserQuery(1);
+  console.log(data);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error...</p>;
+  }
   return (
     <>
       <h1>Teams</h1>
@@ -59,31 +69,33 @@ const Teams = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 group">
-            <tr className=" last:border-b">
-              <td className="px-6 py-4 text-sm font-medium text-black">
-                <div className="w-14 h-14 rounded-full overflow-hidden">
-                  <img
-                    src="https://picsum.photos/100"
-                    className="w-full h-full object-cover"
-                    alt=""
-                  />
-                </div>
-              </td>
-              <td className="px-6 py-4 text-sm text-black">dede@email.com</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                Dede Supriatna
-              </td>
-              <td className="px-6 py-4 text-sm text-black">Programmer</td>
-              <td className="px-6 py-4 flex gap-1 justify-center items-center text-end text-sm font-medium">
-                {/* Button Delete */}
-                <button
-                  type="button"
-                  className="p-2 rounded-lg border border-red-500"
-                >
-                  <i className="bx bx-trash text-red-500"></i>
-                </button>
-              </td>
-            </tr>
+            {data?.data?.map((item, index) => (
+              <tr key={index} className=" last:border-b">
+                <td className="px-6 py-4 text-sm font-medium text-black">
+                  <div className="w-14 h-14 rounded-full overflow-hidden">
+                    <img
+                      src={item.photo}
+                      className="w-full h-full object-cover"
+                      alt={item.name}
+                    />
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-sm text-black">{item.email}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                  {item.name}
+                </td>
+                <td className="px-6 py-4 text-sm text-black">{item.title}</td>
+                <td className="px-6 py-4 flex gap-1 justify-center items-center text-end text-sm font-medium">
+                  {/* Button Delete */}
+                  <button
+                    type="button"
+                    className="p-2 rounded-lg border border-red-500"
+                  >
+                    <i className="bx bx-trash text-red-500"></i>
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
