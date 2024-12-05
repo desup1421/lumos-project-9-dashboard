@@ -40,7 +40,7 @@ const App = () => {
       <Router>
         <ScrollToTop />
         {isAuthenticated && <Sidebar />}
-        <main className="bg-white min-h-screen md:ml-72 p-10 ">
+        <main className={`bg-white min-h-screen ${isAuthenticated && 'md:ml-72' }  p-10 `}>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route

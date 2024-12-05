@@ -30,7 +30,7 @@ const Sidebar = () => {
       <div className="flex md:flex flex-row gap-10">
         <div className="w-full max-w-[18rem]">
           <aside
-            className={`sidebar h-full w-0 overflow-hidden md:w-full ${
+            className={`sidebar h-full w-0 overflow-hidden md:overflow-visible md:w-full ${
               isShow && "w-full overflow-visible"
             } sidebar-fixed-left justify-start bg-black text-white transition-all duration-500`}
           >
