@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import PropTypes from "prop-types";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import {
   ClassicEditor,
@@ -46,12 +47,13 @@ import {
 
 import "ckeditor5/ckeditor5.css";
 
-const LICENSE_KEY =
-  "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3MzQ1NjYzOTksImp0aSI6Ijg5YzllMmE1LTBjNjYtNDQwMy05YjA3LWFlM2IwZjc1MTFhMyIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6ImJkYmFlMjY2In0.ZGey4vSJ4cqvnRPbHWMMrVlySZ2WYm11r2sA46gg0hW2IpqzLv-SvHNMSUomW4C5T1BDuzodY_d1A6VICxLCCQ";
+const LICENSE_KEY = 'GPL';
 
-export default function Editor() {
+export default function Editor({ onChange, value }) {
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
+  const editorInstanceRef = useRef(null)
+
   const [isLayoutReady, setIsLayoutReady] = useState(false);
 
   useEffect(() => {
@@ -59,6 +61,12 @@ export default function Editor() {
 
     return () => setIsLayoutReady(false);
   }, []);
+
+  useEffect(() => {
+    if (editorInstanceRef.current && value !== editorInstanceRef.current.getData()) {
+      editorInstanceRef.current.setData(value);
+    }
+  }, [value]);
 
   const { editorConfig } = useMemo(() => {
     if (!isLayoutReady) {
@@ -76,8 +84,6 @@ export default function Editor() {
             "underline",
             "|",
             "link",
-            "insertImage",
-            "mediaEmbed",
             "insertTable",
             "blockQuote",
             "|",
@@ -227,12 +233,23 @@ export default function Editor() {
   }, [isLayoutReady]);
 
   return (
-    <div className="w-[99%]">
+    <div className="w-full">
       <div ref={editorContainerRef}>
         <div>
           <div ref={editorRef}>
             {editorConfig && (
-              <CKEditor editor={ClassicEditor} config={editorConfig} onChange={(e, editor) => console.log(editor.getData())} />
+              <CKEditor
+                editor={ClassicEditor}
+                config={editorConfig}
+                onReady={(editor)=> {
+                  editorInstanceRef.current = editor;
+                }}
+                onChange={(e, editor) => {
+                  const data = editor.getData();
+                  onChange(data);
+                }}
+
+              />
             )}
           </div>
         </div>
@@ -240,3 +257,8 @@ export default function Editor() {
     </div>
   );
 }
+
+Editor.propTypes = {
+  onChange: PropTypes.func,
+  value: PropTypes.string,
+};

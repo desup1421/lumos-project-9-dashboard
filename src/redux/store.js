@@ -8,6 +8,8 @@ import { encryptTransform } from 'redux-persist-transform-encrypt';
 // Slice reducer
 import authSlice from './slices/authSlice';
 import useSlice from './slices/userSlice';
+import portfolioSlice from './slices/portfolioSlice';
+import blogSlice from './slices/blogSlice';
 // import useSlice from './slices/userUpdate';
 // import { userSliceAPI } from './slices/userSlice';
 
@@ -27,6 +29,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
     auth: authSlice,
     users: useSlice,
+    portfolio: portfolioSlice,
+    blog: blogSlice,
     // [userSliceAPI.reducerPath]: userSliceAPI.reducer
 });
 
