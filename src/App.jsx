@@ -77,7 +77,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/user/edit/:email"
+                path="/user/edit/:id"
                 element={
                   <ProtectedRoute>
                     <CreateUser />
@@ -96,6 +96,14 @@ const App = () => {
               />
               <Route
                 path="/portfolio/create"
+                element={
+                  <ProtectedRoute>
+                    <CreatePortfolio />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/portfolio/edit/:id"
                 element={
                   <ProtectedRoute>
                     <CreatePortfolio />

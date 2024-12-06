@@ -1,19 +1,25 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createPortfolio } from "../redux/slices/portfolioSlice";
+import { createPortfolio, getDetailPortfolio, updatePortfolio } from "../redux/slices/portfolioSlice";
 import Editor from "./CKEditor";
 import useForm from "../hooks/useForm";
 
 const FormCreatePortfolio = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const {pathname} = useLocation();
   const dispatch = useDispatch();
-  const { isLoading, message, isError, isSuccess } = useSelector(
+  const { isLoading, message, isError, isSuccess, detail } = useSelector(
     (state) => state.portfolio
   );
-  const [values, handleChange, clearForm] = useForm({
+  const [values, handleChange, clearForm] = useForm(detail.data || initialValues);
+
+  const initialValues = {
     banner: null,
     title: "",
     content: "",
-  });
+  };
 
   const handleEditorChange = (data) => {
     handleChange({
@@ -30,22 +36,38 @@ const FormCreatePortfolio = () => {
     for (let key in values) {
       formData.append(key, values[key]);
     }
-    dispatch(createPortfolio(formData));
+    if (pathname === "/portfolio/create") {
+      dispatch(createPortfolio(formData));
+    } else {
+      formData.append("id", id);
+      dispatch(updatePortfolio(formData));
+    }
     if (isError) {
       alert(message);
     }
-    if (isSuccess) {
-      alert("Success");
-      clearForm();
-    }
-    console.log(values);
   };
+
+  useEffect(()=> {
+    if (id) {
+      dispatch(getDetailPortfolio(id));
+    }
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate('/portfolio');
+    }
+  }, [isSuccess, navigate, clearForm]);
+
+  if(isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="border w-full max-w-[760px] m-10 rounded-lg px-5 py-10 shadow-md grid gap-7">
       <header className="flex justify-center items-center">
         <h1 className="text-3xl font-bold text-center text-primary w-1/2">
-          Create Portfolio
+        {pathname === "/portfolio/create" ? "Create" : "Update"} Portfolio
         </h1>
       </header>
       <form onSubmit={handleSubmit} className="grid gap-3">
@@ -73,16 +95,20 @@ const FormCreatePortfolio = () => {
           />
         </div>
         {/* CONTENT */}
-        <div>
+        <div className="overflow-hidden">
           <p>Content</p>
-          <Editor id="content" value={values.content} onChange={handleEditorChange} />
+          <Editor
+            id="content"
+            value={values.content}
+            onChange={handleEditorChange}
+          />
         </div>
         {/* BUTTON */}
         <button
           disabled={isLoading}
           className="bg-primary-500 hover:scale-95 text-black disabled:bg-primary-500/50 rounded-md mt-2 p-2"
         >
-          {isLoading ? "Loading..." : "Add"}
+          {isLoading ? "Loading..." : pathname === "/portfolio/create" ? "Add" : "Update"}
         </button>
       </form>
     </div>

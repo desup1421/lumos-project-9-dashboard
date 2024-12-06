@@ -3,6 +3,7 @@ import axios from "axios";
 
 const initialState = {
   blogs: [],
+  blog: {},
   isLoading: false,
   isError: false,
   error: "",
@@ -47,6 +48,83 @@ export const createBlog = createAsyncThunk(
     }
   }
 );
+export const updateBlog = createAsyncThunk(
+  "blog/update",
+  async (data, { getState, rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}blogs/${data.id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${getState().auth.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteBlog = createAsyncThunk(
+  "blog/delete",
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `${API_URL}blogs/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${getState().auth.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getDetail = createAsyncThunk(
+  "blog/detail",
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}blogs/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${getState().auth.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+)
+
+export const updatePublish = createAsyncThunk(
+  "blog/publish",
+  async (id, { getState, rejectWithValue }) => {
+    try {
+      const response = await axios.patch(
+        `${API_URL}blogs/${id}/publish`, {},
+        {
+          headers: {
+            Authorization: `Bearer ${getState().auth.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+)
+
 
 const blogSlice = createSlice({
   name: "blog",
@@ -59,11 +137,13 @@ const blogSlice = createSlice({
         state.isLoading = true;
         state.isError = false;
         state.error = "";
+        
       })
       .addCase(getBlog.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.blogs = action.payload;
+        state.isSuccess = false;
       })
       .addCase(getBlog.rejected, (state, action) => {
         state.isLoading = false;
@@ -80,12 +160,85 @@ const blogSlice = createSlice({
       .addCase(createBlog.fulfilled, (state) => {
         state.isLoading = false;
         state.isError = false;
+        state.isSuccess = true;
       })
       .addCase(createBlog.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.error = action.payload;
       });
+    // UPDATE BLOG
+    builder
+      .addCase(updateBlog.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(updateBlog.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(updateBlog.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action.payload;
+      });
+
+    // DELETE BLOG
+    builder
+      .addCase(deleteBlog.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(deleteBlog.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(deleteBlog.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action.payload;
+      });
+
+    // DETAIL BLOG
+    builder
+      .addCase(getDetail.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(getDetail.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.blog = action.payload;
+        state.isSuccess = true;
+      })
+      .addCase(getDetail.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action.payload;
+      });
+    // UPDATE PUBLISH BLOG
+    builder
+    .addCase(updatePublish.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(updatePublish.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(updatePublish.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action.payload;
+      }); 
+    
   },
 });
 

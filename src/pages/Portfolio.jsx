@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getPortfolio } from "../redux/slices/portfolioSlice";
+import {
+  getPortfolio,
+  deletePortfolio,
+} from "../redux/slices/portfolioSlice";
 import { useNavigate } from "react-router-dom";
 
 const Portfolio = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { portfolio, isLoading } = useSelector((state) => state.portfolio);
+  const { portfolio, isLoading, isSuccess } = useSelector((state) => state.portfolio);
 
   const formatDate = (date) => {
     const newDate = new Date(date);
@@ -24,6 +27,12 @@ const Portfolio = () => {
   useEffect(() => {
     dispatch(getPortfolio(1));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(getPortfolio(1));
+    }
+  }, [isSuccess, dispatch]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -84,7 +93,7 @@ const Portfolio = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 group">
-            {portfolio?.data.map((item) => (
+            { portfolio?.data.map((item) => (
               <tr key={item.id} className="last:border-b">
                 <td className="px-6 py-4 text-sm font-medium text-black">
                   <div className="w-14 h-14  overflow-hidden">
@@ -104,8 +113,17 @@ const Portfolio = () => {
                   <button
                     type="button"
                     className="p-2 rounded-lg border border-red-500"
+                    onClick={() => dispatch(deletePortfolio(item.id))}
                   >
                     <i className="bx bx-trash text-red-500"></i>
+                  </button>
+                  {/* Button Edit */}
+                  <button
+                    onClick={() => navigate(`/portfolio/edit/${item.id}`)}
+                    type="button"
+                    className="p-2 rounded-lg border border-red-500"
+                  >
+                    <i className="bx bx-pencil text-primary-500"></i>
                   </button>
                 </td>
               </tr>
