@@ -85,7 +85,7 @@ const Blogs = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 group">
-            {blogs?.data.map((item) => (
+            {blogs?.data?.map((item) => (
               <tr key={item.id} className="last:border-b">
                 <td className="px-6 py-4 text-sm text-black">{item.title}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-black">

@@ -93,7 +93,7 @@ const Portfolio = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 group">
-            { portfolio?.data.map((item) => (
+            { portfolio?.data?.map((item) => (
               <tr key={item.id} className="last:border-b">
                 <td className="px-6 py-4 text-sm font-medium text-black">
                   <div className="w-14 h-14  overflow-hidden">
