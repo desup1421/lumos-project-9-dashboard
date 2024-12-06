@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getBlog } from "../redux/slices/blogSlice";
+import { getBlog, updatePublish, deleteBlog } from "../redux/slices/blogSlice";
 import { useNavigate } from "react-router-dom";
 
 const Blogs = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { blogs, isLoading } = useSelector((state) => state.blog);
+  const { blogs, isLoading, isSuccess } = useSelector((state) => state.blog);
   console.log(blogs);
 
   const formatDate = (date) => {
@@ -25,6 +25,12 @@ const Blogs = () => {
   useEffect(() => {
     dispatch(getBlog(1));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(getBlog(1));
+    }
+  }, [isSuccess, dispatch]);  
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -79,7 +85,7 @@ const Blogs = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 group">
-            {blogs?.data.map((item) => (
+            {blogs?.data?.map((item) => (
               <tr key={item.id} className="last:border-b">
                 <td className="px-6 py-4 text-sm text-black">{item.title}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
@@ -88,10 +94,18 @@ const Blogs = () => {
                 <td className="px-6 py-4 flex gap-1 justify-center items-center text-end text-sm font-medium">
                   {/* Button Delete */}
                   <button
+                    onClick={() => dispatch(deleteBlog(item.id))}
                     type="button"
                     className="p-2 rounded-lg border border-red-500"
                   >
                     <i className="bx bx-trash text-red-500"></i>
+                  </button>
+                  <button
+                    onClick={() => dispatch(updatePublish(item.id))}
+                    type="button"
+                    className={`p-2 rounded-lg border ${item.published ? 'bg-black' : 'bg-white' } border-blue-500`}
+                  >
+                    <i className="bx bx-upload text-blue-500"></i>
                   </button>
                 </td>
               </tr>
