@@ -13,15 +13,15 @@ const FormCreatePortfolio = () => {
   const { isLoading, message, isError, isSuccess, detail } = useSelector(
     (state) => state.portfolio
   );
-  const [values, handleChange, clearForm] = useForm(detail.data || initialValues);
-
+  
   const initialValues = {
     banner: null,
     title: "",
     content: "",
   };
+  const [values, handleChange, clearForm] = useForm(detail.data || initialValues);
 
-  const handleEditorChange = (data) => {
+  const handleEditorChange = (data = '') => {
     handleChange({
       target: {
         name: "content",

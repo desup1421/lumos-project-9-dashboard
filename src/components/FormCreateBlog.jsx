@@ -18,7 +18,7 @@ const FormCreateBlog = () => {
     published: false,
   });
 
-  const handleEditorChange = (data) => {
+  const handleEditorChange = (data = '') => {
     handleChange({
       target: {
         name: "content",
