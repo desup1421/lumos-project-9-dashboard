@@ -21,7 +21,7 @@ const FormCreatePortfolio = () => {
     content: "",
   };
 
-  const handleEditorChange = (data) => {
+  const handleEditorChange = (data = '') => {
     handleChange({
       target: {
         name: "content",
