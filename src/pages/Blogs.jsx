@@ -101,6 +101,13 @@ const Blogs = () => {
                     <i className="bx bx-trash text-red-500"></i>
                   </button>
                   <button
+                    onClick={() => navigate(`/blog/edit/${item.id}`)}
+                    type="button"
+                    className="p-2 rounded-lg border border-yellow-500"
+                  >
+                    <i className="bx bx-pencil text-yellow-500"></i>
+                  </button>
+                  <button
                     onClick={() => dispatch(updatePublish(item.id))}
                     type="button"
                     className={`p-2 rounded-lg border ${item.published ? 'bg-black' : 'bg-white' } border-blue-500`}

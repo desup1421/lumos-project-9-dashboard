@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createBlog } from "../redux/slices/blogSlice";
+import {
+  createBlog,
+  getDetailBlog,
+  updateBlog,
+} from "../redux/slices/blogSlice";
 import Editor from "./CKEditor";
 import useForm from "../hooks/useForm";
 
 const FormCreateBlog = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoading, isError, error, isSuccess } = useSelector(
+  const { isLoading, isError, error, isSuccess, blog } = useSelector(
     (state) => state.blog
   );
   const [values, handleChange, clearForm] = useForm({
@@ -18,7 +25,7 @@ const FormCreateBlog = () => {
     published: false,
   });
 
-  const handleEditorChange = (data = '') => {
+  const handleEditorChange = (data = "") => {
     handleChange({
       target: {
         name: "content",
@@ -33,22 +40,45 @@ const FormCreateBlog = () => {
     for (let key in values) {
       formData.append(key, values[key]);
     }
-    dispatch(createBlog(formData));
+
+    if (id) {
+      dispatch(updateBlog(formData));
+    } else {
+      dispatch(createBlog(formData));
+    }
     if (isError) {
       alert(error);
     }
-    if (isSuccess) {
-      alert("Success");
-      clearForm();
-    }
-    console.log(values);
   };
+
+  useEffect(() => {
+    if (isSuccess && !isLoading) {
+      alert("Success");
+      navigate('/blog');
+    }
+  }, [isSuccess, isLoading, navigate])
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getDetailBlog(id));
+    }
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    if (blog.data) {
+      clearForm(blog.data);
+    }
+  }, [blog.data]);
+
+  if(isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="border w-full max-w-[760px] m-10 rounded-lg px-5 py-10 shadow-md grid gap-7">
       <header className="flex justify-center items-center">
         <h1 className="text-3xl font-bold text-center text-primary w-1/2">
-          Create Blog
+          {`${id ? "Edit" : "Create"} blog`}
         </h1>
       </header>
       <form onSubmit={handleSubmit} className="grid gap-3">
@@ -78,7 +108,11 @@ const FormCreateBlog = () => {
         {/* CONTENT */}
         <div className="overflow-hidden width-full">
           <p>Content</p>
-          <Editor id="content" value={values.content} onChange={handleEditorChange} />
+          <Editor
+            id="content"
+            value={values.content}
+            onChange={handleEditorChange}
+          />
         </div>
 
         <div>
@@ -120,7 +154,7 @@ const FormCreateBlog = () => {
           disabled={isLoading}
           className="bg-primary-500 hover:scale-95 text-black disabled:bg-primary-500/50 rounded-md mt-2 p-2"
         >
-          {isLoading ? "Loading..." : "Add"}
+          {isLoading ? "Loading..." : id ? "Update" : "Add"}
         </button>
       </form>
     </div>

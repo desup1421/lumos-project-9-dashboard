@@ -157,6 +157,7 @@ const portfolioSlice = createSlice({
     // UPDATE PORTFOLIO
     builder
       .addCase(updatePortfolio.pending, (state) => {
+        state.isSuccess = false;
         state.isLoading = true;
         state.isError = false;
         state.error = "";
@@ -182,6 +183,7 @@ const portfolioSlice = createSlice({
         state.isError = false;
         state.detail = action.payload;
         state.isLoading = false;
+        state.isSuccess = false;
       })
       .addCase(getDetailPortfolio.rejected, (state, action) => {
         state.isLoading = false;

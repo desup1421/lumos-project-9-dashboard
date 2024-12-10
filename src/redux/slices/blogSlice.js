@@ -53,7 +53,7 @@ export const updateBlog = createAsyncThunk(
   async (data, { getState, rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${API_URL}blogs/${data.id}`,
+        `${API_URL}blogs/${data.get('id')}`,
         data,
         {
           headers: {
@@ -87,7 +87,7 @@ export const deleteBlog = createAsyncThunk(
   }
 );
 
-export const getDetail = createAsyncThunk(
+export const getDetailBlog = createAsyncThunk(
   "blog/detail",
   async (id, { getState, rejectWithValue }) => {
     try {
@@ -137,7 +137,7 @@ const blogSlice = createSlice({
         state.isLoading = true;
         state.isError = false;
         state.error = "";
-        
+        state.blog = {};
       })
       .addCase(getBlog.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -170,6 +170,7 @@ const blogSlice = createSlice({
     // UPDATE BLOG
     builder
       .addCase(updateBlog.pending, (state) => {
+        state.isSuccess = false;
         state.isLoading = true;
         state.isError = false;
         state.error = "";
@@ -205,18 +206,18 @@ const blogSlice = createSlice({
 
     // DETAIL BLOG
     builder
-      .addCase(getDetail.pending, (state) => {
+      .addCase(getDetailBlog.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.error = "";
       })
-      .addCase(getDetail.fulfilled, (state, action) => {
+      .addCase(getDetailBlog.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.blog = action.payload;
-        state.isSuccess = true;
+        state.isSuccess = false;
       })
-      .addCase(getDetail.rejected, (state, action) => {
+      .addCase(getDetailBlog.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.error = action.payload;

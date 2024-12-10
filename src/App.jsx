@@ -128,6 +128,14 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/blog/edit/:id"
+                element={
+                  <ProtectedRoute>
+                    <CreateBlog />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

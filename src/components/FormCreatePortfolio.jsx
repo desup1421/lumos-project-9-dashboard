@@ -33,11 +33,10 @@ const FormCreatePortfolio = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    console.log(values);
     for (let key in values) {
       formData.append(key, values[key]);
     }
-    console.log(formData);
+
     if (pathname === "/portfolio/create") {
       dispatch(createPortfolio(formData));
     } else {
@@ -47,6 +46,13 @@ const FormCreatePortfolio = () => {
       alert(message);
     }
   };
+
+  useEffect(() => {
+    if (isSuccess && !isLoading) {
+      alert('Success');
+      navigate('/portfolio');
+    }
+  }, [isSuccess, navigate, isLoading]);
 
   useEffect(()=> {
     if (id) {
@@ -60,12 +66,6 @@ const FormCreatePortfolio = () => {
     }
   }, [detail.data]);
   
-
-  useEffect(() => {
-    if (isSuccess) {
-      navigate('/portfolio');
-    }
-  }, [isSuccess, navigate, clearForm]);
 
   if(isLoading) {
     return <div>Loading...</div>
