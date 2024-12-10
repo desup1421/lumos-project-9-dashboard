@@ -62,12 +62,6 @@ export default function Editor({ onChange, value }) {
     return () => setIsLayoutReady(false);
   }, []);
 
-  useEffect(() => {
-    if (editorInstanceRef.current && value !== editorInstanceRef.current.getData()) {
-      editorInstanceRef.current.setData(value);
-    }
-  }, [value]);
-
   const { editorConfig } = useMemo(() => {
     if (!isLayoutReady) {
       return {};
@@ -243,6 +237,7 @@ export default function Editor({ onChange, value }) {
                 config={editorConfig}
                 onReady={(editor)=> {
                   editorInstanceRef.current = editor;
+                  if(value) editor.setData(value);
                 }}
                 onChange={(e, editor) => {
                   const data = editor.getData();

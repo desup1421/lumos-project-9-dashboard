@@ -11,8 +11,8 @@ const useForm = (initialValues) => {
         }));
     };
 
-    const clearForm = () => {
-        setValues(initialValues);
+    const clearForm = (data) => {
+        setValues(data || initialValues);
     };
 
     return [values, handleChange, clearForm];

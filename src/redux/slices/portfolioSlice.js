@@ -66,7 +66,7 @@ export const updatePortfolio = createAsyncThunk(
   "portfolio/update",
   async (data, { getState, rejectWithValue }) => {
     try {
-      const response = await axios.put(`${API_URL}portfolio/${data.id}`, data, {
+      const response = await axios.put(`${API_URL}portfolio/${data.get("id")}`, data, {
         headers: {
           Authorization: `Bearer ${getState().auth.token}`,
         },
@@ -106,6 +106,8 @@ const portfolioSlice = createSlice({
         state.isError = false;
         state.error = "";
         state.portfolio = [];
+        state.detail = {};
+        state.isSuccess = false;
       })
       .addCase(getPortfolio.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -177,9 +179,9 @@ const portfolioSlice = createSlice({
         state.error = "";
       })
       .addCase(getDetailPortfolio.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.isError = false;
         state.detail = action.payload;
+        state.isLoading = false;
       })
       .addCase(getDetailPortfolio.rejected, (state, action) => {
         state.isLoading = false;
