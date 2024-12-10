@@ -57,11 +57,11 @@ const FormCreatePortfolio = () => {
   useEffect(()=> {
     if (id) {
       dispatch(getDetailPortfolio(id));
-    }
+    } 
   }, [id, dispatch]);
 
   useEffect(() => {
-    if (detail.data) {
+    if (id && detail.data) {
       clearForm(detail.data);
     }
   }, [detail.data]);
@@ -75,7 +75,7 @@ const FormCreatePortfolio = () => {
     <div className="border w-full max-w-[760px] m-10 rounded-lg px-5 py-10 shadow-md grid gap-7">
       <header className="flex justify-center items-center">
         <h1 className="text-3xl font-bold text-center text-primary w-1/2">
-        {pathname === "/portfolio/create" ? "Create" : "Update"} Portfolio
+        {id ? "Update" : "Create"} Portfolio
         </h1>
       </header>
       <form onSubmit={handleSubmit} className="grid gap-3">
@@ -116,7 +116,7 @@ const FormCreatePortfolio = () => {
           disabled={isLoading}
           className="bg-primary-500 hover:scale-95 text-black disabled:bg-primary-500/50 rounded-md mt-2 p-2"
         >
-          {isLoading ? "Loading..." : pathname === "/portfolio/create" ? "Add" : "Update"}
+          {isLoading ? "Loading..." : id ? "Update" : "Add"}
         </button>
       </form>
     </div>

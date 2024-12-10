@@ -65,7 +65,7 @@ const FormCreateBlog = () => {
   }, [id, dispatch]);
 
   useEffect(() => {
-    if (blog.data) {
+    if (id && blog.data) {
       clearForm(blog.data);
     }
   }, [blog.data]);
