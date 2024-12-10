@@ -19,9 +19,9 @@ const FormCreatePortfolio = () => {
     title: "",
     content: "",
   };
-  const [values, handleChange, clearForm] = useForm(detail.data || initialValues);
-  
-  const handleEditorChange = (data = '') => {
+  const [values, handleChange, clearForm] = useForm(initialValues);
+
+  const handleEditorChange = ( data = '') => {
     handleChange({
       target: {
         name: "content",
@@ -33,13 +33,14 @@ const FormCreatePortfolio = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
+    console.log(values);
     for (let key in values) {
       formData.append(key, values[key]);
     }
+    console.log(formData);
     if (pathname === "/portfolio/create") {
       dispatch(createPortfolio(formData));
     } else {
-      formData.append("id", id);
       dispatch(updatePortfolio(formData));
     }
     if (isError) {
@@ -52,6 +53,13 @@ const FormCreatePortfolio = () => {
       dispatch(getDetailPortfolio(id));
     }
   }, [id, dispatch]);
+
+  useEffect(() => {
+    if (detail.data) {
+      clearForm(detail.data);
+    }
+  }, [detail.data]);
+  
 
   useEffect(() => {
     if (isSuccess) {
